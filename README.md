@@ -5,6 +5,16 @@ Celá stránka je jediný súbor bez závislostí: [`index.html`](./index.html).
 
 **Živá stránka:** https://ttomas1.github.io/jadrovevrtanie/
 
+## Nasadenie na vlastné VPS (navrtame.sk)
+
+Server: AlmaLinux 9 + Virtualmin. Súbory na nasadenie: `index.html`, `robots.txt`, `sitemap.xml`.
+
+1. **DNS u registrátora:** A záznam `@` → IP servera, A záznam `www` → IP servera (TTL 3600).
+2. **Virtualmin:** Create Virtual Server → doména `navrtame.sk` (bez DB, bez PHP).
+3. **Súbory:** nahrať do `/home/navrtame/public_html/` (scp/SFTP alebo `git clone` tohto repa a symlink/kópia).
+4. **HTTPS:** Virtualmin → Manage Virtual Server → Setup SSL Website → Let's Encrypt (doplniť aj `www.navrtame.sk`), zapnúť presmerovanie HTTP → HTTPS.
+5. **Aktualizácie:** upraviť súbory tu v repo a na serveri `git pull` (alebo znova scp).
+
 ## Zapnutie GitHub Pages (bezplatné, jednorazovo)
 
 1. Otvorte **Settings → Pages** tohto repozitára.
