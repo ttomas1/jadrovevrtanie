@@ -72,7 +72,7 @@
     {
       "@type": "Question",
       "name": "Koľko stojí jadrové vŕtanie?",
-      "acceptedAnswer": {"@type": "Answer", "text": "Cena sa počíta za centimeter hĺbky vrtu podľa priemeru: od 0,90 € pri Ø 32–52 mm po 4,00 € pri Ø 300 mm. Napríklad otvor Ø 102 mm cez panel 15 cm vyjde 19,50 €. Minimálna hodnota zákazky je 90 €."}
+      "acceptedAnswer": {"@type": "Answer", "text": "Otvor pre klimatizáciu cez panel stojí 100 € s dopravou v Bratislave, každý ďalší otvor pri jednej návšteve má zľavu 20 %. Väčšie priemery sa počítajú za centimeter hĺbky vrtu: od 0,90 € pri Ø 32–52 mm po 4,00 € pri Ø 300 mm. Minimálna hodnota zákazky je 100 €."}
     },
     {
       "@type": "Question",
@@ -195,6 +195,16 @@
   .terms ul{margin-left:18px;color:var(--slate);font-size:.92rem}
   .terms li{margin:6px 0}
   .terms b{color:var(--ink)}
+  .packs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:30px}
+  .pack{background:#fff;border:2px solid var(--blue);border-radius:var(--radius);padding:26px 24px;text-align:center;box-shadow:var(--shadow)}
+  .pack h3{font-size:1.05rem;margin-bottom:6px}
+  .pack .p-diam{color:var(--slate);font-size:.88rem;margin-bottom:12px}
+  .pack .p-price{font-size:2rem;font-weight:800;color:var(--blue-dark)}
+  .pack .p-price small{font-size:.9rem;font-weight:600;color:var(--slate)}
+  .pack .p-note{color:var(--slate);font-size:.85rem;margin-top:10px}
+  .packs-hint{text-align:center;color:var(--slate);font-size:.92rem;margin:-12px 0 30px}
+  .packs-hint b{color:var(--red)}
+  @media(max-width:900px){.packs{grid-template-columns:1fr}}
 
   /* Contact */
   .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:36px;align-items:start}
@@ -516,8 +526,29 @@
     <div class="sec-head">
       <span class="kicker">Cenník</span>
       <h2>Transparentné ceny za jadrové vŕtanie</h2>
-      <p>Cena sa počíta za každý centimeter hĺbky vrtu podľa priemeru diamantovej korunky. Ceny sú orientačné — presnú ponuku pripravíme obratom podľa rozsahu zákazky.</p>
+      <p>Najčastejšie zákazky za pevnú cenu s dopravou v Bratislave — a pre všetko ostatné prehľadná sadzba za centimeter hĺbky vrtu podľa priemeru korunky.</p>
     </div>
+    <div class="packs">
+      <div class="pack">
+        <h3>Otvor pre klimatizáciu</h3>
+        <div class="p-diam">Ø 62 – 82 mm · panel, tehla aj železobetón</div>
+        <div class="p-price">100 €</div>
+        <div class="p-note">s dopravou v Bratislave · hotové zvyčajne do 30 minút</div>
+      </div>
+      <div class="pack">
+        <h3>Otvor pre digestor či kanalizáciu</h3>
+        <div class="p-diam">Ø 102 – 132 mm</div>
+        <div class="p-price"><small>od</small> 110 €</div>
+        <div class="p-note">s dopravou v Bratislave</div>
+      </div>
+      <div class="pack">
+        <h3>Prestup pre rekuperáciu / VZT</h3>
+        <div class="p-diam">Ø 152 – 202 mm</div>
+        <div class="p-price"><small>od</small> 125 €</div>
+        <div class="p-note">s dopravou v Bratislave</div>
+      </div>
+    </div>
+    <p class="packs-hint"><b>Každý ďalší otvor pri jednej návšteve so zľavou −20 %</b> — využite náš výjazd naplno.</p>
     <div class="price-table-wrap">
       <table>
         <thead>
@@ -537,10 +568,11 @@
     </div>
     <div class="price-notes">
       <ul>
-        <li><b>Príklad:</b> otvor Ø 102 mm cez panel hrúbky 15 cm = 15 × 1,30 € = <b>19,50 €</b>.</li>
-        <li><b>Minimálna hodnota zákazky:</b> 90 € (vrátane dopravy v rámci Bratislavy).</li>
-        <li><b>Doprava mimo Bratislavy:</b> 0,50 € / km.</li>
-        <li><b>Príplatky:</b> vŕtanie do stropu +50 %, silne armovaný betón +20 %, expresný výjazd do 24 h +30 %.</li>
+        <li><b>Príklad:</b> otvor Ø 102 mm cez panel hrúbky 15 cm = 15 × 1,30 € = <b>19,50 €</b> (uplatní sa minimálna hodnota zákazky).</li>
+        <li><b>Minimálna hodnota zákazky:</b> 100 € (vrátane dopravy v rámci Bratislavy).</li>
+        <li><b>Každý ďalší otvor pri jednej návšteve:</b> zľava −20 % z ceny vŕtania.</li>
+        <li><b>Doprava mimo Bratislavy:</b> 0,50 € / km od hraníc Bratislavy, účtuje sa jedna cesta.</li>
+        <li><b>Príplatky:</b> vŕtanie do stropu +50 %, silne armovaný betón +20 %, expresný výjazd do 24 h +30 %, práca cez víkend +50 %.</li>
         <li>Pri väčšom počte otvorov alebo pravidelnej spolupráci poskytujeme <b>individuálne zľavy</b>.</li>
         <li><b>Prestoje zavinené objednávateľom</b> (nejasné či nevyznačené miesto vŕtania, neprístupné pracovisko, čakanie na rozhodnutie) účtujeme sadzbou <b>35 € / hod.</b>, za každú začatú polhodinu.</li>
         <li>Uvedené ceny sú konečné — nie sme platcami DPH.</li>
