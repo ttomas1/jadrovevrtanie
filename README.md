@@ -31,7 +31,6 @@ Všetko je v `index.html`:
 | Čo | Ako nájsť | Poznámka |
 |---|---|---|
 | Telefónne číslo | vyhľadajte `+421 910 323 969` a `+421910323969` | reálne číslo, vyskytuje sa na viacerých miestach |
-| E-mail | vyhľadajte `info@navrtame.sk` | generický zobrazovaný e-mail k navrhnutej doméne |
 | Ceny | sekcia `<section id="cennik">` | orientačné trhové ceny, upravte podľa seba |
 | Kontaktný formulár | `action="https://formsubmit.co/7060e3a5c9d195b1369b3ccb56069ab4"` | aktivovaný náhodný alias FormSubmit — skrýva skutočnú cieľovú adresu pred spambotmi |
 | Fotky | sekcia `<section id="praca">` | zatiaľ ilustračné SVG obrázky; vlastnú fotku vložíte nahradením celého `<svg>…</svg>` za `<img src="foto.jpg" alt="Jadrové vŕtanie">` (súbor fotky nahrajte vedľa index.html) |
