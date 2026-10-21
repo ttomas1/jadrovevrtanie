@@ -223,6 +223,9 @@
   .f-field input,.f-field select,.f-field textarea{padding:12px 14px;border:1.5px solid var(--line);border-radius:9px;font:inherit;font-size:.95rem;background:var(--bg-soft)}
   .f-field input:focus,.f-field select:focus,.f-field textarea:focus{outline:none;border-color:var(--blue);background:#fff}
   form small.gdpr{display:block;color:var(--slate);font-size:.78rem;margin:4px 0 16px}
+  #form-msg{padding:14px 16px;border-radius:10px;font-weight:600;font-size:.95rem;margin-bottom:18px}
+  #form-msg.ok{background:#dcfce7;border:1px solid #86efac;color:#166534}
+  #form-msg.err{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b}
 
   /* FAQ */
   details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -650,10 +653,8 @@
         </div>
         <div class="c-hours">Expresné výjazdy a práca cez víkend po telefonickej dohode.</div>
       </div>
-      <form action="https://formsubmit.co/7060e3a5c9d195b1369b3ccb56069ab4" method="POST">
-        <input type="hidden" name="_subject" value="Dopyt z navrtame.sk">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
+      <form action="/kontakt.php" method="POST">
+        <div id="form-msg" hidden></div>
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="f-grid">
           <div class="f-field">
@@ -708,6 +709,26 @@
   const links = document.getElementById('navLinks');
   burger.addEventListener('click', () => links.classList.toggle('open'));
   links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // Hlaska po navrate z kontakt.php (?odoslane=1 / ?chyba=...)
+  (function(){
+    const p = new URLSearchParams(location.search);
+    const el = document.getElementById('form-msg');
+    if (!el) return;
+    if (p.get('odoslane') === '1') {
+      el.textContent = 'Ďakujeme, váš dopyt bol odoslaný. Ozveme sa vám čo najskôr — zvyčajne do 24 hodín.';
+      el.className = 'ok'; el.hidden = false;
+    } else if (p.get('chyba') === 'prazdne') {
+      el.textContent = 'Vyplňte prosím meno, telefón a popis zákazky a odošlite formulár znova.';
+      el.className = 'err'; el.hidden = false;
+    } else if (p.get('chyba')) {
+      el.textContent = 'Dopyt sa nepodarilo odoslať. Zavolajte nám prosím priamo na +421 910 323 969 — ďakujeme.';
+      el.className = 'err'; el.hidden = false;
+    }
+    if (p.has('odoslane') || p.has('chyba')) {
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
+  })();
 </script>
 
 </body>
