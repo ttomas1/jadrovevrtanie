@@ -28,7 +28,7 @@ curl -s "https://api.indexnow.org/indexnow?url=https://navrtame.sk/&key=$INDEXNO
 CODE=$(curl -s -o /tmp/kontakt-selftest.out -w "%{http_code}" -X POST https://navrtame.sk/kontakt.php \
   --data-urlencode "Meno=Selftest deploy" \
   --data-urlencode "Telefon=+421000000000" \
-  --data-urlencode "Sprava=Automaticky self-test po nasadeni - ignorujte." || echo 000)
+  --data-urlencode "Sprava=Automaticky self-test po nasadeni $(date '+%F %T') - ignorujte." || echo 000)
 if [ "$CODE" = "302" ]; then
   echo "Self-test formulara: OK (HTTP 302, dopyt zapisany v /home/navrtame/formlog/dopyty.log)"
 else
@@ -36,5 +36,12 @@ else
   echo "!!! zapnite PHP pre domenu: Virtualmin -> navrtame.sk -> Web Configuration -> PHP Options."
   head -c 300 /tmp/kontakt-selftest.out; echo
 fi
+
+echo "=== Posledne zaznamy v zaloznom logu dopytov ==="
+tail -n 3 /home/navrtame/formlog/dopyty.log 2>/dev/null || echo "(log zatial neexistuje)"
+echo "=== Fronta neodoslanej posty (mailq) ==="
+mailq 2>/dev/null | tail -n 6 || echo "(mailq nedostupne)"
+echo "=== Posledne zaznamy mail logu pre nasich prijemcov ==="
+grep -hiE "metrex|gmail|formular@navrtame" /var/log/maillog 2>/dev/null | tail -n 8 || echo "(maillog nedostupny)"
 
 echo "Nasadene: $(sudo -u navrtame git -C "$SITE" log -1 --oneline)"

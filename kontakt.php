@@ -1,7 +1,7 @@
 <?php
 // Kontaktný formulár navrtame.sk — spracovanie na vlastnom serveri.
-// E-mail príjemcu sa číta z /home/navrtame/.form_recipient (súbor mimo
-// verejného repozitára aj mimo document rootu, aby adresa nebola zverejnená).
+// Príjemcovia sa čítajú z /home/navrtame/.form_recipient (jedna adresa na
+// riadok; súbor je mimo verejného repozitára aj mimo document rootu).
 // Každý dopyt sa pre istotu zapisuje aj do /home/navrtame/formlog/dopyty.log.
 declare(strict_types=1);
 
@@ -57,10 +57,16 @@ if (!is_dir(dirname(LOG_FILE))) {
     FILE_APPEND | LOCK_EX
 );
 
-$to = trim((string)@file_get_contents(RECIPIENT_FILE));
+$recipients = [];
+foreach (preg_split('/\R+/', (string)@file_get_contents(RECIPIENT_FILE)) ?: [] as $r) {
+    $r = trim($r);
+    if ($r !== '' && filter_var($r, FILTER_VALIDATE_EMAIL)) {
+        $recipients[] = $r;
+    }
+}
 $sent = false;
 
-if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
+if ($recipients !== []) {
     $body = "Nový dopyt z navrtame.sk\n"
         . "------------------------------\n"
         . "Meno:    {$meno}\n"
@@ -79,7 +85,7 @@ if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
     }
 
     $subject = '=?UTF-8?B?' . base64_encode('Dopyt z navrtame.sk – ' . $meno) . '?=';
-    $sent = mail($to, $subject, $body, $headers);
+    $sent = mail(implode(', ', $recipients), $subject, $body, $headers);
 }
 
 header('Location: ' . ($sent ? '/?odoslane=1#kontakt' : '/?chyba=odoslanie#kontakt'));
