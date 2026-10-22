@@ -85,7 +85,9 @@ if ($recipients !== []) {
     }
 
     $subject = '=?UTF-8?B?' . base64_encode('Dopyt z navrtame.sk – ' . $meno) . '?=';
-    $sent = mail(implode(', ', $recipients), $subject, $body, $headers);
+    // Piaty parameter nastavuje obálkového odosielateľa (envelope-from),
+    // aby sa zhodoval s hlavičkou From a SPF domény navrtame.sk.
+    $sent = mail(implode(', ', $recipients), $subject, $body, $headers, '-f' . FROM_ADDRESS);
 }
 
 header('Location: ' . ($sent ? '/?odoslane=1#kontakt' : '/?chyba=odoslanie#kontakt'));
