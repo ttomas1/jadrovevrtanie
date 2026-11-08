@@ -9,7 +9,7 @@ RECIPIENT_FILE=/home/navrtame/.form_recipient
 INDEXNOW_KEY=11179fdc02195420b5fe7ffbd7cfe6f8
 
 sudo -u navrtame git -C "$SITE" pull
-sudo -u navrtame cp "$SITE"/{index.html,robots.txt,sitemap.xml,og-image.png,kontakt.php,"$INDEXNOW_KEY".txt} "$DOCROOT"/
+sudo -u navrtame cp "$SITE"/{index.html,robots.txt,sitemap.xml,llms.txt,og-image.png,kontakt.php,"$INDEXNOW_KEY".txt} "$DOCROOT"/
 
 # Adresar pre zalozny log dopytov z formulara
 sudo -u navrtame mkdir -p /home/navrtame/formlog
