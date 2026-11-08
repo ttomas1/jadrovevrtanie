@@ -39,6 +39,27 @@ if ($meno === '' || $telefon === '' || $sprava === '') {
     exit;
 }
 
+// Anti-spam: pole _t vypĺňa JavaScript stránky pri načítaní. Bot, ktorý
+// POST-uje priamo na endpoint bez načítania stránky, token nemá.
+$isSpam = (strpos($line('_t', 40), 'nvt-') !== 0);
+
+// Limit: najviac 5 dopytov za hodinu z jednej IP (počíta sa z logu).
+$ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+if (!$isSpam && $ip !== '' && is_readable(LOG_FILE)) {
+    $hourAgo = time() - 3600;
+    $count = 0;
+    foreach (array_slice(file(LOG_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [], -200) as $l) {
+        if (strpos($l, 'ip=' . $ip . ' ') !== false
+            && preg_match('/^\[([0-9 :-]{19})\]/', $l, $m)
+            && strtotime($m[1]) >= $hourAgo) {
+            $count++;
+        }
+    }
+    if ($count >= 5) {
+        $isSpam = true;
+    }
+}
+
 // Záložný zápis na disk — dopyt sa nestratí, ani keby e-mail zlyhal.
 if (!is_dir(dirname(LOG_FILE))) {
     @mkdir(dirname(LOG_FILE), 0750, true);
@@ -46,16 +67,25 @@ if (!is_dir(dirname(LOG_FILE))) {
 @file_put_contents(
     LOG_FILE,
     sprintf(
-        "[%s] meno=%s | tel=%s | email=%s | priemer=%s | sprava=%s\n",
+        "[%s]%s meno=%s | tel=%s | email=%s | priemer=%s | ip=%s | sprava=%s\n",
         date('Y-m-d H:i:s'),
+        $isSpam ? ' [SPAM]' : '',
         $meno,
         $telefon,
         $email,
         $priemer,
+        $ip,
         str_replace("\n", ' / ', $sprava)
     ),
     FILE_APPEND | LOCK_EX
 );
+
+// Spam: botovi potvrdíme „úspech", ale e-mail neodošleme.
+// Dopyt zostáva zaznamenaný v logu s značkou [SPAM] pre prípad omylu.
+if ($isSpam) {
+    header('Location: /?odoslane=1#kontakt');
+    exit;
+}
 
 $recipients = [];
 foreach (preg_split('/\R+/', (string)@file_get_contents(RECIPIENT_FILE)) ?: [] as $r) {

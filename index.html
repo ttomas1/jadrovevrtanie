@@ -656,6 +656,7 @@
       <form action="/kontakt.php" method="POST">
         <div id="form-msg" hidden></div>
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="_t" value="">
         <div class="f-grid">
           <div class="f-field">
             <label for="f-name">Meno *</label>
@@ -712,6 +713,8 @@
 
   // Hlaska po navrate z kontakt.php (?odoslane=1 / ?chyba=...)
   (function(){
+    const t = document.querySelector('input[name="_t"]');
+    if (t) t.value = 'nvt-' + Date.now().toString(36);
     const p = new URLSearchParams(location.search);
     const el = document.getElementById('form-msg');
     if (!el) return;

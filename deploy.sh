@@ -25,9 +25,11 @@ fi
 curl -s "https://api.indexnow.org/indexnow?url=https://navrtame.sk/&key=$INDEXNOW_KEY" -o /dev/null -w "IndexNow ping: HTTP %{http_code}\n" || true
 
 # Self-test formuloveho endpointu: ocakavame presmerovanie 302 na /?odoslane=1...
+# (_t je anti-spam token, ktory inak vyplna JavaScript stranky)
 CODE=$(curl -s -o /tmp/kontakt-selftest.out -w "%{http_code}" -X POST https://navrtame.sk/kontakt.php \
   --data-urlencode "Meno=Selftest deploy" \
   --data-urlencode "Telefon=+421000000000" \
+  --data-urlencode "_t=nvt-selftest" \
   --data-urlencode "Sprava=Automaticky self-test po nasadeni $(date '+%F %T') - ignorujte." || echo 000)
 if [ "$CODE" = "302" ]; then
   echo "Self-test formulara: OK (HTTP 302, dopyt zapisany v /home/navrtame/formlog/dopyty.log)"
