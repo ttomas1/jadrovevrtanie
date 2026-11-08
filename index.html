@@ -17,6 +17,20 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://navrtame.sk/og-image.png">
 <link rel="canonical" href="https://navrtame.sk/">
+<!-- Google Analytics 4 s Consent Mode v2: meranie sa zapne az po suhlase v cookie liste -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied'
+  });
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -226,6 +240,11 @@
   #form-msg{padding:14px 16px;border-radius:10px;font-weight:600;font-size:.95rem;margin-bottom:18px}
   #form-msg.ok{background:#dcfce7;border:1px solid #86efac;color:#166534}
   #form-msg.err{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b}
+  #cookiebar{position:fixed;left:16px;right:16px;bottom:16px;z-index:100;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:14px 18px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.88rem;color:var(--slate);max-width:720px;margin:0 auto}
+  #cookiebar .cc-btns{display:flex;gap:8px;flex:none}
+  #cookiebar button{padding:9px 16px;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;border:0}
+  #cc-accept{background:var(--blue);color:#fff}
+  #cc-decline{background:var(--bg-soft);color:var(--slate);border:1px solid var(--line)}
 
   /* FAQ */
   details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -704,6 +723,14 @@
   </div>
 </footer>
 
+<div id="cookiebar" hidden>
+  <span>Používame analytické cookies (Google Analytics), aby sme vedeli, ktoré informácie návštevníkom pomáhajú. Vaše rozhodnutie môžete kedykoľvek zmeniť vymazaním cookies.</span>
+  <div class="cc-btns">
+    <button id="cc-accept" type="button">Prijať</button>
+    <button id="cc-decline" type="button">Odmietnuť</button>
+  </div>
+</div>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
   const burger = document.getElementById('burger');
@@ -731,6 +758,26 @@
     if (p.has('odoslane') || p.has('chyba')) {
       history.replaceState(null, '', location.pathname + location.hash);
     }
+  })();
+
+  // Cookie lista pre Google Analytics (Consent Mode v2)
+  (function(){
+    const bar = document.getElementById('cookiebar');
+    let choice = null;
+    try { choice = localStorage.getItem('ga-consent'); } catch(e) {}
+    function grant(){ gtag('consent', 'update', { analytics_storage: 'granted' }); }
+    if (choice === 'granted') { grant(); }
+    else if (choice !== 'denied' && bar) { bar.hidden = false; }
+    const acc = document.getElementById('cc-accept');
+    const dec = document.getElementById('cc-decline');
+    if (acc) acc.addEventListener('click', function(){
+      try { localStorage.setItem('ga-consent', 'granted'); } catch(e) {}
+      grant(); bar.hidden = true;
+    });
+    if (dec) dec.addEventListener('click', function(){
+      try { localStorage.setItem('ga-consent', 'denied'); } catch(e) {}
+      bar.hidden = true;
+    });
   })();
 </script>
 
